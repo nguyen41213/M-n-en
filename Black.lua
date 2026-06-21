@@ -11,20 +11,16 @@ gui.ResetOnSpawn = false
 local black = Instance.new("Frame")
 black.Parent = gui
 black.Size = UDim2.new(1,0,1,0)
-black.BackgroundColor3 =
-	Color3.fromRGB(0,0,0)
-
+black.BackgroundColor3 = Color3.new(0,0,0)
 black.BorderSizePixel = 0
 black.Visible = true
 
--- Nút
-local button =
-	Instance.new("TextButton")
-
+-- Nút nhỏ hơn ~40%
+local button = Instance.new("TextButton")
 button.Parent = gui
 
 button.Size =
-	UDim2.new(0,160,0,40)
+	UDim2.new(0,96,0,24)
 
 button.Position =
 	UDim2.new(0.45,0,0.1,0)
@@ -35,9 +31,10 @@ button.BackgroundColor3 =
 button.BorderColor3 =
 	Color3.fromRGB(255,255,255)
 
-button.BorderSizePixel = 2
+button.BorderSizePixel = 1
 
 button.Text = "OFF"
+
 button.TextColor3 =
 	Color3.new(1,1,1)
 
@@ -45,13 +42,13 @@ button.TextScaled = true
 button.Font =
 	Enum.Font.GothamBold
 
--- BO GÓC NHỎ (gần vuông)
+-- Bo nhẹ
 local corner =
 	Instance.new("UICorner")
 
 corner.Parent = button
 corner.CornerRadius =
-	UDim.new(0,4)
+	UDim.new(0,6)
 
 -- ON / OFF
 local screenEnabled = true
@@ -72,7 +69,7 @@ button.MouseButton1Click:Connect(function()
 
 end)
 
--- GIỮ RỒI KÉO
+-- Giữ rồi kéo
 local dragging = false
 local dragInput
 local dragStart
@@ -82,20 +79,13 @@ button.InputBegan:Connect(function(input)
 
 	if input.UserInputType ==
 	Enum.UserInputType.MouseButton1
-
 	or input.UserInputType ==
 	Enum.UserInputType.Touch then
 
 		dragging = true
-
-		dragInput =
-			input
-
-		dragStart =
-			input.Position
-
-		startPos =
-			button.Position
+		dragInput = input
+		dragStart = input.Position
+		startPos = button.Position
 
 		input.Changed:Connect(function()
 
@@ -111,8 +101,8 @@ end)
 
 UIS.InputChanged:Connect(function(input)
 
-	if dragging
-	and input == dragInput then
+	if dragging and
+	input == dragInput then
 
 		local delta =
 			input.Position
@@ -121,13 +111,10 @@ UIS.InputChanged:Connect(function(input)
 		button.Position =
 			UDim2.new(
 				startPos.X.Scale,
-				startPos.X.Offset
-				+ delta.X,
+				startPos.X.Offset + delta.X,
 
 				startPos.Y.Scale,
-				startPos.Y.Offset
-				+ delta.Y
+				startPos.Y.Offset + delta.Y
 			)
-
 	end
 end)
