@@ -8,17 +8,14 @@ gui.Name = "BlackScreen"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
---------------------------------------------------
--- CHỮ HIỆN KHI BẬT SCRIPT
---------------------------------------------------
+------------------------------------------------
+-- CREDIT
+------------------------------------------------
 
-local label =
-	Instance.new("TextLabel")
+local label = Instance.new("TextLabel")
 
 label.Parent = gui
-
-label.Size =
-	UDim2.new(0,320,0,55)
+label.Size = UDim2.new(0,320,0,55)
 
 label.Position =
 	UDim2.new(
@@ -51,34 +48,47 @@ task.spawn(function()
 
 end)
 
---------------------------------------------------
--- MÀN HÌNH ĐEN
---------------------------------------------------
+------------------------------------------------
+-- BLACK SCREEN
+------------------------------------------------
 
 local black =
 	Instance.new("Frame")
 
-black.Parent = gui
+black.Parent =
+	gui
 
 black.Size =
-	UDim2.new(1,0,1,0)
+	UDim2.new(
+		1,0,
+		1,0
+	)
 
 black.BackgroundColor3 =
-	Color3.new(0,0,0)
+	Color3.new(
+		0,
+		0,
+		0
+	)
 
-black.BorderSizePixel = 0
+black.BorderSizePixel =
+	0
 
+-- MỞ SCRIPT KHÔNG ĐEN
 local screenEnabled =
-	true
+	false
 
-black.Visible = true
+black.Visible =
+	false
 
---------------------------------------------------
--- NÚT
---------------------------------------------------
+------------------------------------------------
+-- BUTTON
+------------------------------------------------
 
 local button =
-	Instance.new("TextButton")
+	Instance.new(
+		"TextButton"
+	)
 
 button.Parent =
 	gui
@@ -116,8 +126,9 @@ button.BorderColor3 =
 button.BorderSizePixel =
 	1
 
+-- BAN ĐẦU ON
 button.Text =
-	"OFF"
+	"ON"
 
 button.TextColor3 =
 	Color3.new(
@@ -132,9 +143,9 @@ button.TextScaled =
 button.Font =
 	Enum.Font.GothamBold
 
---------------------------------------------------
--- BO GÓC NHẸ
---------------------------------------------------
+------------------------------------------------
+-- BO NHẸ
+------------------------------------------------
 
 local corner =
 	Instance.new(
@@ -150,9 +161,9 @@ corner.CornerRadius =
 		6
 	)
 
---------------------------------------------------
--- ON OFF
---------------------------------------------------
+------------------------------------------------
+-- TOGGLE
+------------------------------------------------
 
 local busy =
 	false
@@ -193,9 +204,9 @@ button.MouseButton1Click:Connect(function()
 
 end)
 
---------------------------------------------------
--- GIỮ RỒI KÉO
---------------------------------------------------
+------------------------------------------------
+-- DRAG
+------------------------------------------------
 
 local dragging =
 	false
@@ -234,12 +245,9 @@ button.InputBegan:Connect(function(input)
 
 		input.Changed:Connect(function()
 
-			if
-			input.UserInputState
+			if input.UserInputState
 			==
-			Enum.UserInputState.End
-
-			then
+			Enum.UserInputState.End then
 
 				dragging =
 					false
