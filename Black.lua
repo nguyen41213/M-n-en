@@ -12,22 +12,36 @@ gui.Parent = player:WaitForChild("PlayerGui")
 -- CREDIT
 ------------------------------------------------
 
-local label = Instance.new("TextLabel")
+local label =
+	Instance.new("TextLabel")
 
-label.Parent = gui
-label.Size = UDim2.new(0,320,0,55)
+label.Parent =
+	gui
+
+label.Size =
+	UDim2.new(
+		0.5,
+		0,
+		0.2,
+		0
+	)
 
 label.Position =
 	UDim2.new(
-		0.5,-160,
-		0.22,0
+		0.25,
+		0,
+		0.2,
+		0
 	)
 
-label.BackgroundTransparency = 1
+label.BackgroundTransparency =
+	1
 
-label.RichText = true
+label.RichText =
+	true
 
-label.TextScaled = true
+label.TextScaled =
+	true
 
 label.Font =
 	Enum.Font.GothamBold
@@ -36,11 +50,15 @@ label.Text =
 '<font color="rgb(120,190,255)">By</font> @n_g_uy_e_n\nFlow để mình có động lực làm script'
 
 label.TextColor3 =
-	Color3.new(1,1,1)
+	Color3.new(
+		1,
+		1,
+		1
+	)
 
 task.spawn(function()
 
-	task.wait(2)
+	task.wait(5)
 
 	if label then
 		label:Destroy()
@@ -60,8 +78,10 @@ black.Parent =
 
 black.Size =
 	UDim2.new(
-		1,0,
-		1,0
+		1,
+		0,
+		1,
+		0
 	)
 
 black.BackgroundColor3 =
@@ -74,7 +94,7 @@ black.BackgroundColor3 =
 black.BorderSizePixel =
 	0
 
--- MỞ SCRIPT KHÔNG ĐEN
+-- mở script không đen
 local screenEnabled =
 	false
 
@@ -126,7 +146,6 @@ button.BorderColor3 =
 button.BorderSizePixel =
 	1
 
--- BAN ĐẦU ON
 button.Text =
 	"ON"
 
@@ -144,7 +163,7 @@ button.Font =
 	Enum.Font.GothamBold
 
 ------------------------------------------------
--- BO NHẸ
+-- BO GÓC NHẸ
 ------------------------------------------------
 
 local corner =
@@ -162,7 +181,7 @@ corner.CornerRadius =
 	)
 
 ------------------------------------------------
--- TOGGLE
+-- ON / OFF
 ------------------------------------------------
 
 local busy =
@@ -205,7 +224,7 @@ button.MouseButton1Click:Connect(function()
 end)
 
 ------------------------------------------------
--- DRAG
+-- GIỮ RỒI KÉO
 ------------------------------------------------
 
 local dragging =
