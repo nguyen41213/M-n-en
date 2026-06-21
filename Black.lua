@@ -58,7 +58,7 @@ label.TextColor3 =
 
 task.spawn(function()
 
-	task.wait(5)
+	task.wait(10)
 
 	if label then
 		label:Destroy()
