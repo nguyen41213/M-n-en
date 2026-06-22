@@ -1,336 +1,399 @@
-local Players = game:GetService("Players")
-local UIS = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
+repeat task.wait() until game:IsLoaded()
 
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
+local Players=game:GetService("Players")
+local UIS=game:GetService("UserInputService")
+local RunService=game:GetService("RunService")
+local Lighting=game:GetService("Lighting")
 
-if playerGui:FindFirstChild("BlackScreen") then
-	playerGui.BlackScreen:Destroy()
+local player=Players.LocalPlayer
+local guiParent=player:WaitForChild("PlayerGui")
+
+if guiParent:FindFirstChild("BlackScreen") then
+	guiParent.BlackScreen:Destroy()
 end
+
+pcall(function()
+	if setfpscap then
+		setfpscap(45)
+	end
+end)
+
+------------------------------------------------
+-- LOW GRAPHIC
+------------------------------------------------
+
+local function clean(v)
+
+	if v:IsA("BasePart") then
+
+		v.Material=
+			Enum.Material.SmoothPlastic
+
+		v.Reflectance=0
+
+		v.CastShadow=false
+
+	elseif
+	v:IsA("Texture")
+	or
+	v:IsA("Decal")
+
+	then
+
+		v.Transparency=1
+
+	elseif
+
+	v:IsA("ParticleEmitter")
+	or
+	v:IsA("Trail")
+	or
+	v:IsA("Smoke")
+	or
+	v:IsA("Sparkles")
+
+	then
+
+		v.Enabled=false
+
+	end
+
+end
+
+local function LowGraphic()
+
+	local Terrain=
+	workspace:FindFirstChildOfClass(
+		"Terrain"
+	)
+
+	pcall(function()
+
+		settings().Rendering.QualityLevel=1
+
+		if Terrain then
+
+			Terrain.WaterWaveSize=0
+			Terrain.WaterWaveSpeed=0
+			Terrain.WaterReflectance=0
+			Terrain.WaterTransparency=0
+
+		end
+
+		Lighting.GlobalShadows=false
+		Lighting.FogEnd=9e9
+		Lighting.Brightness=2
+
+	end)
+
+	if workspace:FindFirstChild(
+		"Clouds"
+	)
+
+	then
+
+		workspace.Clouds:Destroy()
+
+	end
+
+	for _,
+	v in pairs(
+		Lighting:GetChildren()
+	)
+
+	do
+
+		if v:IsA(
+			"PostEffect"
+		)
+
+		then
+
+			v.Enabled=false
+
+		end
+
+	end
+
+	for i,v in pairs(
+		workspace:GetDescendants()
+	)
+
+	do
+
+		clean(v)
+
+		if i%300==0 then
+			task.wait()
+		end
+
+	end
+
+	workspace.DescendantAdded:Connect(function(v)
+
+		task.wait()
+
+		clean(v)
+
+	end)
+
+end
+
+LowGraphic()
 
 ------------------------------------------------
 -- GUI
 ------------------------------------------------
 
-local gui = Instance.new("ScreenGui")
+local gui=
+Instance.new("ScreenGui")
 
-gui.Name =
-	"BlackScreen"
+gui.Name="BlackScreen"
 
-gui.Parent =
-	playerGui
+gui.Parent=guiParent
 
-gui.ResetOnSpawn =
-	false
+gui.ResetOnSpawn=false
 
-gui.IgnoreGuiInset =
-	true
+gui.IgnoreGuiInset=true
 
 ------------------------------------------------
 -- CREDIT
 ------------------------------------------------
 
-local label =
-	Instance.new(
-		"TextLabel"
-	)
-
-label.Parent =
-	gui
-
-label.Size =
-	UDim2.new(
-		0.5,
-		0,
-		0.2,
-		0
-	)
-
-label.Position =
-	UDim2.new(
-		0.25,
-		0,
-		0.2,
-		0
-	)
-
-label.BackgroundTransparency =
-	1
-
-label.RichText =
-	true
-
-label.TextScaled =
-	true
-
-label.Font =
-	Enum.Font.GothamBold
-
-label.Text =
-'<font color="rgb(120,190,255)">By</font> @n_g_uy_e_n\nFlow để mình có động lực làm script'
-
-label.TextColor3 =
-	Color3.new(
-		1,
-		1,
-		1
-	)
-
-task.delay(
-	5,
-	function()
-
-		if label then
-
-			label:Destroy()
-
-		end
-
-	end
+local label=
+Instance.new(
+"TextLabel"
 )
 
+label.Parent=gui
+
+label.Size=
+UDim2.new(
+0.5,
+0,
+0.2,
+0
+)
+
+label.Position=
+UDim2.new(
+0.25,
+0,
+0.2,
+0
+)
+
+label.BackgroundTransparency=1
+
+label.RichText=true
+
+label.TextScaled=true
+
+label.Font=
+Enum.Font.GothamBold
+
+label.Text=
+'<font color="rgb(120,190,255)">By</font> @n_g_uy_e_n\nFlow để mình có động lực làm script'
+
+task.delay(5,function()
+
+	if label then
+		label:Destroy()
+	end
+
+end)
+
 ------------------------------------------------
--- BLACK SCREEN
+-- BLACK
 ------------------------------------------------
 
-local black =
-	Instance.new(
-		"Frame"
-	)
+local black=
+Instance.new(
+"Frame"
+)
 
-black.Parent =
-	gui
+black.Parent=gui
 
-black.Size =
-	UDim2.new(
-		1,
-		0,
-		1,
-		0
-	)
+black.Size=
+UDim2.new(
+1,
+0,
+1,
+0
+)
 
-black.BackgroundColor3 =
-	Color3.new(
-		0,
-		0,
-		0
-	)
+black.BackgroundColor3=
+Color3.new()
 
-black.BorderSizePixel =
-	0
+black.BorderSizePixel=0
 
-black.Visible =
-	false
+black.Visible=false
 
 ------------------------------------------------
 -- BUTTON
 ------------------------------------------------
 
-local button =
-	Instance.new(
-		"TextButton"
-	)
+local button=
+Instance.new(
+"TextButton"
+)
 
-button.Parent =
-	gui
+button.Parent=gui
 
-button.Size =
-	UDim2.new(
-		0,
-		96,
-		0,
-		24
-	)
+button.Size=
+UDim2.new(
+0,
+96,
+0,
+24
+)
 
-button.Position =
-	UDim2.new(
-		0.45,
-		0,
-		0.1,
-		0
-	)
+button.Position=
+UDim2.new(
+0.45,
+0,
+0.1,
+0
+)
 
-button.BackgroundColor3 =
-	Color3.fromRGB(
-		30,
-		30,
-		30
-	)
+button.Text="ON"
 
-button.BorderColor3 =
-	Color3.new(
-		1,
-		1,
-		1
-	)
+button.TextScaled=true
 
-button.BorderSizePixel =
-	1
+button.TextColor3=
+Color3.new(
+1,
+1,
+1
+)
 
-button.Text =
-	"ON"
+button.BackgroundColor3=
+Color3.fromRGB(
+30,
+30,
+30
+)
 
-button.TextScaled =
-	true
+button.Font=
+Enum.Font.GothamBold
 
-button.TextColor3 =
-	Color3.new(
-		1,
-		1,
-		1
-	)
-
-button.Font =
-	Enum.Font.GothamBold
-
-local corner =
-	Instance.new(
-		"UICorner"
-	)
-
-corner.Parent =
-	button
-
-corner.CornerRadius =
-	UDim.new(
-		0,
-		6
-	)
+Instance.new(
+"UICorner",
+button
+).CornerRadius=
+UDim.new(
+0,
+6
+)
 
 ------------------------------------------------
--- TIME FPS
+-- INFO
 ------------------------------------------------
 
-local info =
-	Instance.new(
-		"TextLabel"
-	)
+local info=
+Instance.new(
+"TextLabel"
+)
 
-info.Parent =
-	gui
+info.Parent=gui
 
-info.Size =
-	UDim2.new(
-		0,
-		115,
-		0,
-		40
-	)
+info.Size=
+UDim2.new(
+0,
+120,
+0,
+40
+)
 
-info.Position =
-	UDim2.new(
-		0,
-		10,
-		1,
-		-50
-	)
+info.Position=
+UDim2.new(
+0,
+10,
+1,
+-50
+)
 
-info.BackgroundColor3 =
-	Color3.fromRGB(
-		20,
-		20,
-		20
-	)
+info.TextScaled=true
 
-info.BackgroundTransparency =
-	0.2
+info.BackgroundColor3=
+Color3.fromRGB(
+20,
+20,
+20
+)
 
-info.TextScaled =
-	true
+info.TextColor3=
+Color3.new(
+1,
+1,
+1
+)
 
-info.TextColor3 =
-	Color3.new(
-		1,
-		1,
-		1
-	)
-
-info.Font =
-	Enum.Font.GothamBold
-
-local infoCorner =
-	Instance.new(
-		"UICorner"
-	)
-
-infoCorner.Parent =
-	info
-
-infoCorner.CornerRadius =
-	UDim.new(
-		0,
-		6
-	)
+Instance.new(
+"UICorner",
+info
+).CornerRadius=
+UDim.new(
+0,
+6
+)
 
 ------------------------------------------------
--- TIMER + FPS (VÔ HẠN)
+-- FPS
 ------------------------------------------------
 
-local start =
-	os.clock()
+local start=
+os.clock()
 
-local frames =
-	0
+local fps=0
 
-local fps =
-	0
+local frames=0
 
-local last =
-	os.clock()
+local last=os.clock()
 
 RunService.RenderStepped:Connect(function()
 
-	frames += 1
+	frames+=1
 
-	local now =
-		os.clock()
+	local now=
+	os.clock()
 
-	if now-last >= 1 then
+	if now-last>=1 then
 
-		fps =
-			frames
+		fps=frames
 
-		frames =
-			0
+		frames=0
 
-		last =
-			now
+		last=now
 
 	end
 
-	local total =
-		math.floor(
-			now-start
-		)
+	local total=
+	math.floor(
+		now-start
+	)
 
-	local h =
-		math.floor(
-			total/3600
-		)
+	local h=
+	math.floor(
+		total/3600
+	)
 
-	local m =
-		math.floor(
-			(total%3600)/60
-		)
+	local m=
+	math.floor(
+		(total%3600)/60
+	)
 
-	local s =
-		total%60
+	local s=
+	total%60
 
-	info.Text =
-		string.format(
-
-			"%02d:%02d:%02d\nFPS:%d",
-
-			h,
-
-			m,
-
-			s,
-
-			fps
-
-		)
+	info.Text=
+	string.format(
+		"%02d:%02d:%02d\nFPS:%d",
+		h,
+		m,
+		s,
+		fps
+	)
 
 end)
 
@@ -338,45 +401,22 @@ end)
 -- ON OFF
 ------------------------------------------------
 
-local enabled =
-	false
-
-local busy =
-	false
+local enabled=false
 
 button.MouseButton1Click:Connect(function()
 
-	if busy then
-		return
-	end
+	enabled=
+	not enabled
 
-	busy =
-		true
+	black.Visible=
+	enabled
 
-	enabled =
-		not enabled
-
-	black.Visible =
-		enabled
-
-	if enabled then
-
-		button.Text =
-			"OFF"
-
-	else
-
-		button.Text =
-			"ON"
-
-	end
-
-	task.wait(
-		0.3
-	)
-
-	busy =
-		false
+	button.Text=
+	enabled
+	and
+	"OFF"
+	or
+	"ON"
 
 end)
 
@@ -386,32 +426,27 @@ end)
 
 local function drag(ui)
 
-	local dragging =
-		false
+	local hold=false
+	local start
+	local pos
 
-	local dragStart
-	local startPos
+	ui.InputBegan:Connect(function(i)
 
-	ui.InputBegan:Connect(function(input)
-
-		if input.UserInputType ==
+		if i.UserInputType==
 		Enum.UserInputType.Touch
 
 		or
 
-		input.UserInputType ==
+		i.UserInputType==
 		Enum.UserInputType.MouseButton1
 
 		then
 
-			dragging =
-				true
+			hold=true
 
-			dragStart =
-				input.Position
+			start=i.Position
 
-			startPos =
-				ui.Position
+			pos=ui.Position
 
 		end
 
@@ -419,50 +454,29 @@ local function drag(ui)
 
 	ui.InputEnded:Connect(function()
 
-		dragging =
-			false
+		hold=false
 
 	end)
 
-	UIS.InputChanged:Connect(function(input)
+	UIS.InputChanged:Connect(function(i)
 
-		if dragging
+		if hold then
 
-		and
+			local d=
+			i.Position-start
 
-		(
-			input.UserInputType ==
-			Enum.UserInputType.Touch
+			ui.Position=
+			UDim2.new(
 
-			or
+				pos.X.Scale,
 
-			input.UserInputType ==
-			Enum.UserInputType.MouseMovement
-		)
+				pos.X.Offset+d.X,
 
-		then
+				pos.Y.Scale,
 
-			local delta =
-				input.Position
-				-
-				dragStart
+				pos.Y.Offset+d.Y
 
-			ui.Position =
-				UDim2.new(
-
-					startPos.X.Scale,
-
-					startPos.X.Offset
-					+
-					delta.X,
-
-					startPos.Y.Scale,
-
-					startPos.Y.Offset
-					+
-					delta.Y
-
-				)
+			)
 
 		end
 
