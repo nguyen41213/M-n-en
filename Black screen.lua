@@ -3,19 +3,29 @@ local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+if playerGui:FindFirstChild("BlackScreen") then
+playerGui.BlackScreen:Destroy()
+end
+
+---
+
+-- GUI
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "BlackScreen"
 gui.ResetOnSpawn = false
-gui.Parent = player:WaitForChild("PlayerGui")
+gui.IgnoreGuiInset = true
+gui.Parent = playerGui
 
 ---
 
 -- CREDIT
 
 local label = Instance.new("TextLabel")
-label.Parent = gui
 
+label.Parent = gui
 label.Size = UDim2.new(0.5,0,0.2,0)
 label.Position = UDim2.new(0.25,0,0.2,0)
 
@@ -30,9 +40,7 @@ label.Text =
 label.TextColor3 =
 Color3.new(1,1,1)
 
-task.spawn(function()
-
-task.wait(10)
+task.delay(10,function()
 
 if label then
 	label:Destroy()
@@ -44,11 +52,9 @@ end)
 
 -- BLACK SCREEN
 
-local black =
-Instance.new("Frame")
+local black = Instance.new("Frame")
 
-black.Parent =
-gui
+black.Parent = gui
 
 black.Size =
 UDim2.new(1,0,1,0)
@@ -58,9 +64,6 @@ Color3.new(0,0,0)
 
 black.BorderSizePixel =
 0
-
-local screenEnabled =
-false
 
 black.Visible =
 false
@@ -76,7 +79,7 @@ button.Parent =
 gui
 
 button.Size =
-UDim2.new(0,96,0,24)
+UDim2.new(0,100,0,30)
 
 button.Position =
 UDim2.new(0.45,0,0.1,0)
@@ -84,11 +87,8 @@ UDim2.new(0.45,0,0.1,0)
 button.BackgroundColor3 =
 Color3.fromRGB(30,30,30)
 
-button.BorderColor3 =
+button.TextColor3 =
 Color3.new(1,1,1)
-
-button.Text =
-"ON"
 
 button.TextScaled =
 true
@@ -96,8 +96,8 @@ true
 button.Font =
 Enum.Font.GothamBold
 
-button.TextColor3 =
-Color3.new(1,1,1)
+button.Text =
+"ON"
 
 local corner =
 Instance.new("UICorner")
@@ -110,7 +110,7 @@ UDim.new(0,6)
 
 ---
 
--- INFO TIME + FPS
+-- TIME + FPS
 
 local info =
 Instance.new("TextLabel")
@@ -119,13 +119,16 @@ info.Parent =
 gui
 
 info.Size =
-UDim2.new(0,150,0,55)
+UDim2.new(0,180,0,60)
 
 info.Position =
-UDim2.new(0,10,1,-70)
+UDim2.new(0,10,1,-75)
 
 info.BackgroundColor3 =
 Color3.fromRGB(20,20,20)
+
+info.BackgroundTransparency =
+0.2
 
 info.TextColor3 =
 Color3.new(1,1,1)
@@ -136,21 +139,24 @@ true
 info.Font =
 Enum.Font.GothamBold
 
-info.Text =
-"⏱ 00:00:00\n🎮 FPS: 0"
-
 local infoCorner =
 Instance.new("UICorner")
 
 infoCorner.Parent =
 info
 
+infoCorner.CornerRadius =
+UDim.new(0,8)
+
+info.Text =
+"⏱ 00:00:00\n🎮 FPS: 0"
+
 ---
 
--- TIMER + FPS
+-- TIMER + FPS UPDATE
 
-local start =
-tick()
+local startTime =
+os.clock()
 
 local frames =
 0
@@ -159,25 +165,31 @@ local fps =
 0
 
 local last =
-tick()
+os.clock()
 
 RunService.RenderStepped:Connect(function()
 
 frames += 1
 
-if tick()-last >= 1 then
+local now =
+os.clock()
 
-fps = frames
+if now-last >= 1 then
 
-frames = 0
+	fps =
+	frames
 
-last = tick()
+	frames =
+	0
+
+	last =
+	now
 
 end
 
 local sec =
 math.floor(
-tick()-start
+now-startTime
 )
 
 local h =
@@ -217,13 +229,17 @@ end)
 local busy =
 false
 
+local screenEnabled =
+false
+
 button.MouseButton1Click:Connect(function()
 
 if busy then
-return
+	return
 end
 
-busy = true
+busy =
+true
 
 screenEnabled =
 not screenEnabled
@@ -232,25 +248,30 @@ black.Visible =
 screenEnabled
 
 if screenEnabled then
-button.Text = "OFF"
+
+	button.Text =
+	"OFF"
+
 else
-button.Text = "ON"
+
+	button.Text =
+	"ON"
+
 end
 
-task.wait(0.3)
+task.wait(0.2)
 
-busy = false
+busy =
+false
 
 end)
 
 ---
 
--- DRAG
+-- DRAG BUTTON
 
 local dragging =
 false
-
-local dragInput
 
 local dragStart
 
@@ -259,38 +280,46 @@ local startPos
 button.InputBegan:Connect(function(input)
 
 if input.UserInputType
-== Enum.UserInputType.MouseButton1
+==
+Enum.UserInputType.MouseButton1
 
 or
 
 input.UserInputType
-== Enum.UserInputType.Touch
+==
+Enum.UserInputType.Touch
 
 then
 
-dragging = true
+	dragging =
+	true
 
-dragInput = input
+	dragStart =
+	input.Position
 
-dragStart =
-input.Position
-
-startPos =
-button.Position
-
-input.Changed:Connect(function()
-
-if input.UserInputState
-
-Enum.UserInputState.End
-
-then
-
-dragging = false
+	startPos =
+	button.Position
 
 end
 
 end)
+
+button.InputEnded:Connect(function(input)
+
+if input.UserInputType
+==
+Enum.UserInputType.MouseButton1
+
+or
+
+input.UserInputType
+==
+Enum.UserInputType.Touch
+
+then
+
+	dragging =
+	false
 
 end
 
@@ -299,32 +328,44 @@ end)
 UIS.InputChanged:Connect(function(input)
 
 if dragging
+
 and
-input == dragInput
+
+(
+input.UserInputType
+==
+Enum.UserInputType.MouseMovement
+
+or
+
+input.UserInputType
+==
+Enum.UserInputType.Touch
+)
 
 then
 
-local delta =
-input.Position
+	local delta =
+	input.Position
+	-
+	dragStart
 
-dragStart
+	button.Position =
+	UDim2.new(
 
-button.Position =
-UDim2.new(
+	startPos.X.Scale,
 
-startPos.X.Scale,
+	startPos.X.Offset
+	+
+	delta.X,
 
-startPos.X.Offset
-+
-delta.X,
+	startPos.Y.Scale,
 
-startPos.Y.Scale,
+	startPos.Y.Offset
+	+
+	delta.Y
 
-startPos.Y.Offset
-+
-delta.Y
-
-)
+	)
 
 end
 
