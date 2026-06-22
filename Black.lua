@@ -14,45 +14,90 @@ end
 ------------------------------------------------
 
 local gui = Instance.new("ScreenGui")
-gui.Name = "BlackScreen"
-gui.Parent = playerGui
-gui.ResetOnSpawn = false
-gui.IgnoreGuiInset = true
+
+gui.Name =
+	"BlackScreen"
+
+gui.Parent =
+	playerGui
+
+gui.ResetOnSpawn =
+	false
+
+gui.IgnoreGuiInset =
+	true
 
 ------------------------------------------------
 -- CREDIT
 ------------------------------------------------
 
-local label = Instance.new("TextLabel")
+local label =
+	Instance.new(
+		"TextLabel"
+	)
 
-label.Parent = gui
-label.Size = UDim2.new(0.5,0,0.2,0)
-label.Position = UDim2.new(0.25,0,0.2,0)
+label.Parent =
+	gui
 
-label.BackgroundTransparency = 1
-label.RichText = true
-label.TextScaled = true
-label.Font = Enum.Font.GothamBold
+label.Size =
+	UDim2.new(
+		0.5,
+		0,
+		0.2,
+		0
+	)
+
+label.Position =
+	UDim2.new(
+		0.25,
+		0,
+		0.2,
+		0
+	)
+
+label.BackgroundTransparency =
+	1
+
+label.RichText =
+	true
+
+label.TextScaled =
+	true
+
+label.Font =
+	Enum.Font.GothamBold
 
 label.Text =
 '<font color="rgb(120,190,255)">By</font> @n_g_uy_e_n\nFlow để mình có động lực làm script'
 
-label.TextColor3 = Color3.new(1,1,1)
+label.TextColor3 =
+	Color3.new(
+		1,
+		1,
+		1
+	)
 
-task.delay(5,function()
+task.delay(
+	5,
+	function()
 
-	if label then
-		label:Destroy()
+		if label then
+
+			label:Destroy()
+
+		end
+
 	end
-
-end)
+)
 
 ------------------------------------------------
 -- BLACK SCREEN
 ------------------------------------------------
 
 local black =
-	Instance.new("Frame")
+	Instance.new(
+		"Frame"
+	)
 
 black.Parent =
 	gui
@@ -154,7 +199,7 @@ corner.CornerRadius =
 	)
 
 ------------------------------------------------
--- INFO
+-- TIME FPS
 ------------------------------------------------
 
 local info =
@@ -168,9 +213,9 @@ info.Parent =
 info.Size =
 	UDim2.new(
 		0,
-		90,
+		115,
 		0,
-		35
+		40
 	)
 
 info.Position =
@@ -178,7 +223,7 @@ info.Position =
 		0,
 		10,
 		1,
-		-45
+		-50
 	)
 
 info.BackgroundColor3 =
@@ -219,7 +264,7 @@ infoCorner.CornerRadius =
 	)
 
 ------------------------------------------------
--- FPS
+-- TIMER + FPS (VÔ HẠN)
 ------------------------------------------------
 
 local start =
@@ -254,31 +299,43 @@ RunService.RenderStepped:Connect(function()
 
 	end
 
-	local sec =
+	local total =
 		math.floor(
 			now-start
 		)
 
+	local h =
+		math.floor(
+			total/3600
+		)
+
 	local m =
 		math.floor(
-			(sec%3600)/60
+			(total%3600)/60
 		)
 
 	local s =
-		sec%60
+		total%60
 
 	info.Text =
 		string.format(
-			"%02d:%02d\nFPS:%d",
+
+			"%02d:%02d:%02d\nFPS:%d",
+
+			h,
+
 			m,
+
 			s,
+
 			fps
+
 		)
 
 end)
 
 ------------------------------------------------
--- TOGGLE
+-- ON OFF
 ------------------------------------------------
 
 local enabled =
@@ -302,10 +359,17 @@ button.MouseButton1Click:Connect(function()
 	black.Visible =
 		enabled
 
-	button.Text =
-		enabled
-		and "OFF"
-		or "ON"
+	if enabled then
+
+		button.Text =
+			"OFF"
+
+	else
+
+		button.Text =
+			"ON"
+
+	end
 
 	task.wait(
 		0.3
@@ -331,12 +395,14 @@ local function drag(ui)
 	ui.InputBegan:Connect(function(input)
 
 		if input.UserInputType ==
-		Enum.UserInputType.MouseButton1
+		Enum.UserInputType.Touch
 
 		or
 
 		input.UserInputType ==
-		Enum.UserInputType.Touch then
+		Enum.UserInputType.MouseButton1
+
+		then
 
 			dragging =
 				true
@@ -366,12 +432,12 @@ local function drag(ui)
 
 		(
 			input.UserInputType ==
-			Enum.UserInputType.MouseMovement
+			Enum.UserInputType.Touch
 
 			or
 
 			input.UserInputType ==
-			Enum.UserInputType.Touch
+			Enum.UserInputType.MouseMovement
 		)
 
 		then
