@@ -1,64 +1,45 @@
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+if playerGui:FindFirstChild("BlackScreen") then
+	playerGui.BlackScreen:Destroy()
+end
+
+------------------------------------------------
+-- GUI
+------------------------------------------------
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "BlackScreen"
+gui.Parent = playerGui
 gui.ResetOnSpawn = false
-gui.Parent = player:WaitForChild("PlayerGui")
+gui.IgnoreGuiInset = true
 
 ------------------------------------------------
 -- CREDIT
 ------------------------------------------------
 
-local label =
-	Instance.new("TextLabel")
+local label = Instance.new("TextLabel")
 
-label.Parent =
-	gui
+label.Parent = gui
+label.Size = UDim2.new(0.5,0,0.2,0)
+label.Position = UDim2.new(0.25,0,0.2,0)
 
-label.Size =
-	UDim2.new(
-		0.5,
-		0,
-		0.2,
-		0
-	)
-
-label.Position =
-	UDim2.new(
-		0.25,
-		0,
-		0.2,
-		0
-	)
-
-label.BackgroundTransparency =
-	1
-
-label.RichText =
-	true
-
-label.TextScaled =
-	true
-
-label.Font =
-	Enum.Font.GothamBold
+label.BackgroundTransparency = 1
+label.RichText = true
+label.TextScaled = true
+label.Font = Enum.Font.GothamBold
 
 label.Text =
 '<font color="rgb(120,190,255)">By</font> @n_g_uy_e_n\nFlow để mình có động lực làm script'
 
-label.TextColor3 =
-	Color3.new(
-		1,
-		1,
-		1
-	)
+label.TextColor3 = Color3.new(1,1,1)
 
-task.spawn(function()
-
-	task.wait(10)
+task.delay(5,function()
 
 	if label then
 		label:Destroy()
@@ -93,10 +74,6 @@ black.BackgroundColor3 =
 
 black.BorderSizePixel =
 	0
-
--- mở script không đen
-local screenEnabled =
-	false
 
 black.Visible =
 	false
@@ -149,6 +126,9 @@ button.BorderSizePixel =
 button.Text =
 	"ON"
 
+button.TextScaled =
+	true
+
 button.TextColor3 =
 	Color3.new(
 		1,
@@ -156,15 +136,8 @@ button.TextColor3 =
 		1
 	)
 
-button.TextScaled =
-	true
-
 button.Font =
 	Enum.Font.GothamBold
-
-------------------------------------------------
--- BO GÓC NHẸ
-------------------------------------------------
 
 local corner =
 	Instance.new(
@@ -181,8 +154,135 @@ corner.CornerRadius =
 	)
 
 ------------------------------------------------
--- ON / OFF
+-- INFO
 ------------------------------------------------
+
+local info =
+	Instance.new(
+		"TextLabel"
+	)
+
+info.Parent =
+	gui
+
+info.Size =
+	UDim2.new(
+		0,
+		90,
+		0,
+		35
+	)
+
+info.Position =
+	UDim2.new(
+		0,
+		10,
+		1,
+		-45
+	)
+
+info.BackgroundColor3 =
+	Color3.fromRGB(
+		20,
+		20,
+		20
+	)
+
+info.BackgroundTransparency =
+	0.2
+
+info.TextScaled =
+	true
+
+info.TextColor3 =
+	Color3.new(
+		1,
+		1,
+		1
+	)
+
+info.Font =
+	Enum.Font.GothamBold
+
+local infoCorner =
+	Instance.new(
+		"UICorner"
+	)
+
+infoCorner.Parent =
+	info
+
+infoCorner.CornerRadius =
+	UDim.new(
+		0,
+		6
+	)
+
+------------------------------------------------
+-- FPS
+------------------------------------------------
+
+local start =
+	os.clock()
+
+local frames =
+	0
+
+local fps =
+	0
+
+local last =
+	os.clock()
+
+RunService.RenderStepped:Connect(function()
+
+	frames += 1
+
+	local now =
+		os.clock()
+
+	if now-last >= 1 then
+
+		fps =
+			frames
+
+		frames =
+			0
+
+		last =
+			now
+
+	end
+
+	local sec =
+		math.floor(
+			now-start
+		)
+
+	local m =
+		math.floor(
+			(sec%3600)/60
+		)
+
+	local s =
+		sec%60
+
+	info.Text =
+		string.format(
+			"%02d:%02d\nFPS:%d",
+			m,
+			s,
+			fps
+		)
+
+end)
+
+------------------------------------------------
+-- TOGGLE
+------------------------------------------------
+
+local enabled =
+	false
 
 local busy =
 	false
@@ -196,23 +296,16 @@ button.MouseButton1Click:Connect(function()
 	busy =
 		true
 
-	screenEnabled =
-		not screenEnabled
+	enabled =
+		not enabled
 
 	black.Visible =
-		screenEnabled
+		enabled
 
-	if screenEnabled then
-
-		button.Text =
-			"OFF"
-
-	else
-
-		button.Text =
-			"ON"
-
-	end
+	button.Text =
+		enabled
+		and "OFF"
+		or "ON"
 
 	task.wait(
 		0.3
@@ -224,93 +317,92 @@ button.MouseButton1Click:Connect(function()
 end)
 
 ------------------------------------------------
--- GIỮ RỒI KÉO
+-- DRAG
 ------------------------------------------------
 
-local dragging =
-	false
+local function drag(ui)
 
-local dragInput
+	local dragging =
+		false
 
-local dragStart
+	local dragStart
+	local startPos
 
-local startPos
+	ui.InputBegan:Connect(function(input)
 
-button.InputBegan:Connect(function(input)
+		if input.UserInputType ==
+		Enum.UserInputType.MouseButton1
 
-	if input.UserInputType
-	==
-	Enum.UserInputType.MouseButton1
+		or
 
-	or
+		input.UserInputType ==
+		Enum.UserInputType.Touch then
 
-	input.UserInputType
-	==
-	Enum.UserInputType.Touch
+			dragging =
+				true
 
-	then
+			dragStart =
+				input.Position
+
+			startPos =
+				ui.Position
+
+		end
+
+	end)
+
+	ui.InputEnded:Connect(function()
 
 		dragging =
-			true
+			false
 
-		dragInput =
-			input
+	end)
 
-		dragStart =
-			input.Position
+	UIS.InputChanged:Connect(function(input)
 
-		startPos =
-			button.Position
+		if dragging
 
-		input.Changed:Connect(function()
+		and
 
-			if input.UserInputState
-			==
-			Enum.UserInputState.End then
+		(
+			input.UserInputType ==
+			Enum.UserInputType.MouseMovement
 
-				dragging =
-					false
+			or
 
-			end
+			input.UserInputType ==
+			Enum.UserInputType.Touch
+		)
 
-		end)
+		then
 
-	end
+			local delta =
+				input.Position
+				-
+				dragStart
 
-end)
+			ui.Position =
+				UDim2.new(
 
-UIS.InputChanged:Connect(function(input)
+					startPos.X.Scale,
 
-	if dragging
-	and
-	input
-	==
-	dragInput
+					startPos.X.Offset
+					+
+					delta.X,
 
-	then
+					startPos.Y.Scale,
 
-		local delta =
-			input.Position
-			-
-			dragStart
+					startPos.Y.Offset
+					+
+					delta.Y
 
-		button.Position =
-			UDim2.new(
+				)
 
-				startPos.X.Scale,
+		end
 
-				startPos.X.Offset
-				+
-				delta.X,
+	end)
 
-				startPos.Y.Scale,
+end
 
-				startPos.Y.Offset
-				+
-				delta.Y
-
-			)
-
-	end
-
-end)
+drag(button)
+drag(info)
